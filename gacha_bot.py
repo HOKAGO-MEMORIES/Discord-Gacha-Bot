@@ -1,4 +1,10 @@
 import discord
-from bot_token.env import Token
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+Token = os.getenv("Token")
 
 
