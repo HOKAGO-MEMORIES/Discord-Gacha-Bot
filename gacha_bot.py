@@ -1,14 +1,16 @@
 # 메인 함수
-import discord
 import os
 from discord.ext import commands
+from discord import Intents
 # 토큰 불러오기
 from dotenv import load_dotenv
 
 load_dotenv()
 token = os.getenv('Token')
 
+intents = Intents.all()
 bot = commands.Bot(command_prefix='/')
+bot.load.extension('drawingsessingcog')
 
 # 콘솔
 @bot.event
