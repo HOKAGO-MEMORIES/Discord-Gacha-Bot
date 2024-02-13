@@ -1,7 +1,7 @@
 # 기본적인 흐름과 상호작용에 대한 전반적인 로직
 from discord.ext import commands, ui
 from utils.drawbuttion import DrawButton
-from utils.options import option_1, option_2, option_3
+from utils.options import *
 
 class DrawingSessionCog(commands.Cog):
     def __init__(self, bot):
