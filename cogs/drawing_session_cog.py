@@ -18,7 +18,6 @@ class DrawingSessionCog(commands.Cog):
         self.in_use = True
     
         view = ui.View()
-        
         view.add_item(DrawButton(ctx, view, label='1번', custom_id='draw_button_1', callback=None))
         view.add_item(DrawButton(ctx, view, label='2번', custom_id='draw_button_2', callback=None))
         view.add_item(DrawButton(ctx, view, label='3번', custom_id='draw_button_3', callback=None))  
