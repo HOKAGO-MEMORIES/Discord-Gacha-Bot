@@ -13,9 +13,9 @@ class DrawButton(ui.Button):
         if self.custom_id == 'draw_button_1':
             await option_1_callback.on_option_1_click(self.ctx, interaction)
         elif self.custom_id == 'draw_button_2':
-            await option_2_callback.on_option_1_click(self.ctx, interaction)
+            await option_2_callback.on_option_2_click(self.ctx, interaction)
         elif self.custom_id == 'draw_button_3':
-            await option_3_callback.on_option_1_click(self.ctx, interaction)
+            await option_3_callback.on_option_3_click(self.ctx, interaction)
         else:
             if self.callback_func:
                 await self.callback_func(interaction)
