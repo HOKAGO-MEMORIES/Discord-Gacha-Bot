@@ -20,6 +20,6 @@ async def on_ready():
     print(f'  I   D  : {bot.user.id}')
     print('=============================')
 
-bot.load_extension('drawing_session_cog')
+bot.load_extension('cogs.drawing_session_cog')
 
 bot.run(token)
