@@ -1,4 +1,4 @@
-# option_2 버튼에 대한 콜백함수 정의
+# 두 번째 기능
 # 유저 중에서 당첨자 추첨
 from discord.ext import ui
 
