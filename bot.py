@@ -1,6 +1,6 @@
 import discord
 from discord import Game, Status
-from discord.ext import commands
+from discord import app_commands
 import os
 from dotenv import load_dotenv
 
@@ -9,20 +9,34 @@ TOKEN = os.getenv('TOKEN') # 봇 토큰
 GUILD_ID = int(os.getenv('GUILD_ID')) # 서버 ID
 
 intents = discord.Intents.default()
+intents.members = True 
+intents.message_content = True
 
 current_user = None # 현재 봇을 사용하고 있는 사람
-
-bot = commands.Bot(command_prefix='!', intents=intents)
         
-@bot.event
+class MyClient(discord.Client):
+    def __init__(self, *, intents: discord.Intents):
+        super().__init__(intents=intents)
+        self.tree = app_commands.CommandTree(self)
+
+    async def setup_hook(self):
+        await self.tree.sync(guild=discord.Object(id=GUILD_ID))
+
+client = MyClient(intents=intents)
+        
+@client.event
 async def on_ready():
-    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    print(f'Logged in as {client.user} (ID: {client.user.id})')
     print('------')
     game = Game("ㅇㅇ")
-    await bot.change_presence(status=Status.online, activity=game)
+    await client.change_presence(status=Status.online, activity=game)
+    
 
-bot.load_extension('cogs.vote')
-bot.load_extension('cogs.team')
-bot.load_extension('cogs.magic_conch')
+# Cog 로드
+async def load_extensions():
+    await client.load_extension('cogs.vote')
+    await client.load_extension('cogs.team')
+    await client.load_extension('cogs.magic_conch')
+    
 
-bot.run(TOKEN)
+client.run(TOKEN)
