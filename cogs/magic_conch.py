@@ -2,10 +2,14 @@ import random
 import discord
 import os
 
+from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
 class MagicConch(commands.Cog, name="magicconch"):
+    def __init__(self, bot) -> None:
+        self.bot = bot
+    
     @commands.hybrid_command(
         name="마법의소라고동님",
         description="소라... 고동이라고? 이거 말이니?"
@@ -78,7 +82,7 @@ class MagicConch(commands.Cog, name="magicconch"):
             color=0x9900FF
         )
 
-        embed.set_footer(text=f"너의 질문은 : {question}")
+        embed.set_footer(text=f"너의 질문 : {question}")
     
         # 로컬 이미지 첨부
         current_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -89,5 +93,5 @@ class MagicConch(commands.Cog, name="magicconch"):
         await context.send(file=file, embed=embed)
 
    
-async def setup(bot) -> None:
+async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(MagicConch(bot))
