@@ -2,18 +2,18 @@ import random
 import discord
 import os
 
+from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import Context
 
 class MagicConch(commands.Cog, name="magicconch"):
     def __init__(self, bot) -> None:
         self.bot = bot
     
-    @commands.hybrid_command(
+    @app_commands.command(
         name="마법의소라고동님",
         description="소라... 고동이라고? 이거 말이니?"
     )
-    async def MagicConch(self, context: Context, *, question: str) -> None:
+    async def magic_conch(self, interaction: discord.Interaction, *, question: str) -> None:
         answers = [
             "확실해.",
             "주변에다 물어봐.",
@@ -74,7 +74,6 @@ class MagicConch(commands.Cog, name="magicconch"):
             "어차피 마음대로 할거면서.",
         ]
 
-
         embed = discord.Embed(
             title="소라고동님의 답변...", 
             description=f"{random.choice(answers)}", 
@@ -84,12 +83,12 @@ class MagicConch(commands.Cog, name="magicconch"):
         embed.set_footer(text=f"너의 질문 : {question}")
     
         # 로컬 이미지 첨부
-        current_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        current_directory = os.path.dirname(os.path.abspath(__file__))
         image_path = os.path.join(current_directory, 'resources', 'magic_conch.png')
         file = discord.File(image_path, filename='magic_conch.png')
         embed.set_image(url="attachment://magic_conch.png")
 
-        await context.send(file=file, embed=embed)
+        await interaction.response.send_message(file=file, embed=embed)
 
    
 async def setup(bot) -> None:

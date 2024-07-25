@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('TOKEN') # 봇 토큰 
+GUILD_ID = list(map(int, os.getenv('GUILD_ID').split(','))) # 서버 ID
 
 intents = discord.Intents.default()
 intents.members = True 
@@ -34,6 +35,10 @@ class GachaBot(commands.Bot):
                     print(
                         f"Failed to load extension {extension}\n{exception}"
                     )
+        # 슬래시 명령어 동기화
+        for guild_id in GUILD_ID:
+            guild = discord.Object(id=guild_id)
+            await self.tree.sync(guild=guild)
 
     # 봇 상태 무작위 변경 (game status task)
     @tasks.loop(minutes=1.0)
