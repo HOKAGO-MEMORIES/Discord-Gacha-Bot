@@ -2,7 +2,6 @@ import random
 import discord
 import os
 
-from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
