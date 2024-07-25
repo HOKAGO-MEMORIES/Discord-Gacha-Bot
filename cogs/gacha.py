@@ -1,6 +1,5 @@
 import random
 import discord
-import os
 import asyncio
 
 from discord import app_commands
@@ -12,9 +11,9 @@ class Gacha(commands.Cog, name="gacha"):
     def __init__(self, bot) -> None:
         self.bot = bot
 
-    @commands.command(
-            name='가챠',
-            description='선택하기 힘들 때 무작위로 뽑아봅시다.'
+    @commands.hybrid_command(
+        name="가챠",
+        description="선택하기 힘들 때 무작위로 뽑아봅시다."
     )
     @app_commands.describe(
         type="1: 혼자 모든 항목을 작성합니다. 2: 현재 음성채널에 함께 있는 모든 사람과 항목을 작성합니다. 3: 모두가 항목을 작성합니다.",
@@ -52,12 +51,13 @@ class Gacha(commands.Cog, name="gacha"):
         if items:
             result = random.choice(items)
 
+        result_message = "목록\n" + "\n".join(f"- {item}" for item in items)
+            
         embed = discord.Embed(
             title="당첨!",
-            description=f"{result}",
+            description=f"{result}\n\n{result_message}",
             color=0x8FCE00
         )
-
         await context.send(embed=embed)
 
     
@@ -106,7 +106,7 @@ class Gacha(commands.Cog, name="gacha"):
             return
         
 
-        result_message = "목록:\n"
+        result_message = "목록\n"
         all_items = []
         for member, items in member_items.items():
             result_message += f"{member.display_name}: {', '.join(items)}\n"
@@ -159,7 +159,7 @@ class Gacha(commands.Cog, name="gacha"):
             await context.send("아무도 항목을 입력하지 않았습니다.")
             return
 
-        result_message = "목록:\n"
+        result_message = "목록\n"
         all_items = []
         for member, items in member_items.items():
             result_message += f"{member.display_name}: {', '.join(items)}\n"
