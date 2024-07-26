@@ -35,10 +35,6 @@ class GachaBot(commands.Bot):
                     print(
                         f"Failed to load extension {extension}\n{exception}"
                     )
-        # 슬래시 명령어 동기화
-        for guild_id in GUILD_ID:
-            guild = discord.Object(id=guild_id)
-            await self.tree.sync(guild=guild)
 
     # 봇 상태 무작위 변경 (game status task)
     @tasks.loop(minutes=1.0)
@@ -59,8 +55,17 @@ class GachaBot(commands.Bot):
             f"Running on: {platform.system()} {platform.release()} ({os.name})"
         )
         print("-------------------")
+
         await self.load_cogs()
         self.status_task.start()
+
+        # 슬래시 명령어 동기화
+        for guild_id in GUILD_ID:
+            guild = discord.Object(id=guild_id)
+            self.tree.copy_global_to(guild=guild)
+            await self.tree.sync(guild=guild)
+        print("Commands synced.")
+
 
 bot = GachaBot()
 bot.run(TOKEN)
