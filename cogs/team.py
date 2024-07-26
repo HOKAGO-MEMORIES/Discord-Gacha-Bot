@@ -11,9 +11,9 @@ class Team(commands.Cog, name="team"):
     def __init__(self, bot) -> None:
         self.bot = bot
 
-    @commands.command(
-            name="팀짜기",
-            description="무작위로 팀을 짜봅시다."
+    @app_commands.command(
+        name="팀짜기",
+        description="무작위로 팀을 짜봅시다."
     )
     @app_commands.describe(
         type="1: 현재 음성채널에 함께 있는 모든 사람과 팀을 짭니다. 2: 원하는 사람을 선택 후 팀을 짭니다.",
@@ -25,9 +25,9 @@ class Team(commands.Cog, name="team"):
             return
         
         if type == 1:
-            await self.team_voice_channel(interaction)
+            await self.team_voice_channel(interaction, team_num)
         elif type == 2:
-            await self.team_multiple(interaction)
+            await self.team_multiple(interaction, team_num)
 
 
     # type: 1
@@ -76,13 +76,18 @@ class Team(commands.Cog, name="team"):
 
         members = []
         try:
-            msg = await self.bot.wait_for('message', timeout=60.0, check=check)
-            if msg.content.lower() == '완료!':
-                if not members:
-                    await interaction.followup.send("선택된 멤버가 없습니다.")
-                    return
-            else:
-                members = [m for m in msg.mentions if not m.bot]
+            while True:
+                msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+                if msg.content.lower() == '완료!':
+                    if not members:
+                        await interaction.followup.send("선택된 멤버가 없습니다.")
+                        return
+                    break
+                else:
+                    new_members = [m for m in msg.mentions if not m.bot]
+                    members.extend(new_members)
+                    if len(members) >= team_num:
+                        break
         except asyncio.TimeoutError:
             await interaction.followup.send("제한 시간을 초과하여 종료합니다.")
             return
