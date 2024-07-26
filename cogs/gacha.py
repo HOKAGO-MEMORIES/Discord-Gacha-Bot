@@ -47,7 +47,7 @@ class Gacha(commands.Cog, name="gacha"):
                 items.append(msg.content.strip())
             except asyncio.TimeoutError:
                 await interaction.followup.send("제한 시간을 초과하여 종료합니다.")
-                return
+                break
             
         if items:
             result = random.choice(items)
