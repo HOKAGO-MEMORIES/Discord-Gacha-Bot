@@ -127,9 +127,9 @@ class Gacha(commands.Cog, name="gacha"):
 
     # type: 3
     async def gacha_multiple(self, interaction: discord.Interaction) -> None:
-        keyword = "!가챠"
+        keyword = "!"
         await interaction.response.send_message(
-            f"항목을 작성할 때 '{keyword}'로 시작해 주세요. ex) {keyword} 딸기\n"
+            f"항목을 작성할 때 '{keyword}'와 띄어쓰기로 시작해 주세요. ex) {keyword} 딸기\n"
             "각 한사람당 하나씩만 작성 가능하며 제한 시간은 60초 입니다. 입력 완료 후 '완료!'라고 입력해 주세요."
         )
 
