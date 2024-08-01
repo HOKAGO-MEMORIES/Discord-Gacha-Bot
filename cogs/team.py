@@ -16,7 +16,7 @@ class Team(commands.Cog, name="team"):
         description="무작위로 팀을 짜봅시다."
     )
     @app_commands.describe(
-        type="1: 현재 음성채널에 함께 있는 모든 사람과 팀을 짭니다. 2: 원하는 사람을 선택 후 팀을 짭니다.",
+        type="1: 현재 음성채널에 함께 있는 모든 사람과 팀을 짭니다.  /  2: 원하는 사람을 선택 후 팀을 짭니다.",
         team_num="팀의 수를 정합니다.",
     )
     async def team(self, interaction: discord.Interaction, type: Literal[1, 2], team_num: int) -> None:
@@ -71,21 +71,17 @@ class Team(commands.Cog, name="team"):
 
         await interaction.response.send_message(
             "팀에 참가할 멤버를 멘션으로 선택하세요. 예시: @user1 @user2 @user3 ...\n"
-            "모두 선택한 후 '완료!'라고 입력하세요. 제한 시간은 60초입니다."
+            "제한 시간은 60초입니다."
         )
 
         members = []
         try:
             while True:
                 msg = await self.bot.wait_for('message', timeout=60.0, check=check)
-                if msg.content.lower() == '완료!':
-                    if not members:
-                        await interaction.followup.send("선택된 멤버가 없습니다.")
-                        return
-                    break
-                else:
+                if msg.mentions:
                     new_members = [m for m in msg.mentions if not m.bot]
                     members.extend(new_members)
+                    
                     if len(members) >= team_num:
                         break
         except asyncio.TimeoutError:
