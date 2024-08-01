@@ -179,5 +179,5 @@ class Gacha(commands.Cog, name="gacha"):
         
 
 # Cog를 추가
-async def setup(bot) -> None: 
+async def setup(bot: commands.Bot) -> None: 
     await bot.add_cog(Gacha(bot))

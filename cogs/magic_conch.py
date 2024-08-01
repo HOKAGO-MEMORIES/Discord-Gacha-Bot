@@ -91,5 +91,5 @@ class MagicConch(commands.Cog, name="magicconch"):
         await interaction.response.send_message(file=file, embed=embed)
 
    
-async def setup(bot) -> None:
+async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(MagicConch(bot))

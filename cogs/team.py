@@ -17,9 +17,9 @@ class Team(commands.Cog, name="team"):
     )
     @app_commands.describe(
         type="1: 현재 음성채널에 함께 있는 모든 사람과 팀을 짭니다. 2: 원하는 사람을 선택 후 팀을 짭니다.",
-        team_num="팀의 수를 정합니다."
+        team_num="팀의 수를 정합니다.",
     )
-    async def team(self, interaction: discord.Interaction, type: Literal[1, 2], team_num: int):
+    async def team(self, interaction: discord.Interaction, type: Literal[1, 2], team_num: int) -> None:
         if team_num < 2:
             await interaction.response.send_message("팀 수는 2개 이상이어야 합니다.")
             return
@@ -116,5 +116,5 @@ class Team(commands.Cog, name="team"):
 
 
 # Cog를 추가
-async def setup(bot) -> None:
+async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Team(bot))
