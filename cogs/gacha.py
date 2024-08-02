@@ -93,11 +93,11 @@ class Gacha(commands.Cog, name="gacha"):
                 if author not in member_items:
                     member_items[author] = []
 
-                if len(member_items[author]) == 0:
+                if len(member_items[author]) == 0: 
                     member_items[author].append(content.strip())
-
-                if len(member_items) == len(members) and all(len(items) > 0 for items in member_items.values()):
-                    break
+                else:
+                    await msg.reply("이미 항목을 입력하셨습니다. 추가로 입력할 수 없습니다.", mention_author=True) 
+                    
             except asyncio.TimeoutError:
                 await interaction.followup.send("제한 시간이 초과되어 종료합니다.")
                 break
