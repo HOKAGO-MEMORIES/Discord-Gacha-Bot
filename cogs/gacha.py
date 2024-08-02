@@ -15,7 +15,7 @@ class Gacha(commands.Cog, name="gacha"):
         description="선택하기 힘들 때 무작위로 뽑아봅시다."
     )
     @app_commands.describe(
-        type="1: 혼자 모든 항목을 작성합니다. 2: 현재 음성채널에 함께 있는 모든 사람과 항목을 작성합니다. 3: 모두가 항목을 작성합니다.",
+        type="1: 혼자 모든 항목을 작성합니다.  /  2: 현재 음성채널에 함께 있는 모든 사람과 항목을 작성합니다.  /  3: 모두가 항목을 작성합니다.",
     )
     async def gacha(self, interaction: discord.Interaction, type: Literal[1, 2, 3]) -> None:
         if type == 1:
@@ -129,7 +129,7 @@ class Gacha(commands.Cog, name="gacha"):
     async def gacha_multiple(self, interaction: discord.Interaction) -> None:
         keyword = "!"
         await interaction.response.send_message(
-            f"항목을 작성할 때 '{keyword}'와 띄어쓰기로 시작해 주세요. ex) {keyword} 딸기\n"
+            f"항목을 작성할 때 '{keyword}'로 시작해 주세요. ex) {keyword}딸기\n"
             "각 한사람당 하나씩만 작성 가능하며 제한 시간은 60초 입니다. 입력 완료 후 '완료!'라고 입력해 주세요."
         )
 
