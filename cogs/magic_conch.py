@@ -83,8 +83,8 @@ class MagicConch(commands.Cog, name="magicconch"):
         embed.set_footer(text=f"너의 질문 : {question}")
     
         # 로컬 이미지 첨부
-        current_directory = os.path.dirname(os.path.abspath(__file__))
-        image_path = os.path.join(current_directory, 'resources', 'magic_conch.png')
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        image_path = os.path.join(project_root, 'resources', 'magic_conch.png')
         file = discord.File(image_path, filename='magic_conch.png')
         embed.set_image(url="attachment://magic_conch.png")
 
