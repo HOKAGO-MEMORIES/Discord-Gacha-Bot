@@ -45,7 +45,7 @@ class GachaBot(commands.Bot):
     # 봇 상태 무작위 변경 (game status task)
     @tasks.loop(minutes=1.0)
     async def status_task(self) -> None:
-        statuses = ["ㅇㅇ", "를!", "나가"]
+        statuses = ["꿀잠자기", "누워있기", "물구나무서기"]
         await self.change_presence(activity=discord.Game(random.choice(statuses)))
 
     # 봇 시작 전까지 상태 변경 대기 
