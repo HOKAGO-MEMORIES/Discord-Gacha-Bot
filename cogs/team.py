@@ -10,6 +10,8 @@ from typing import Literal
 class Team(commands.Cog, name="team"):
     def __init__(self, bot) -> None:
         self.bot = bot
+        self.active_commands = {}
+
 
     @app_commands.command(
         name="팀짜기",
@@ -20,15 +22,23 @@ class Team(commands.Cog, name="team"):
         team_num="팀의 수를 정합니다.",
     )
     async def team(self, interaction: discord.Interaction, type: Literal[1, 2], team_num: int) -> None:
+        if interaction.user.id in self.active_commands:
+            await interaction.response.send_message("이미 명령어를 실행 중입니다. 실행 중인 명령어가 완료된 후 다시 시도해 주세요.")
+            return
+        
         if team_num < 2:
             await interaction.response.send_message("팀 수는 2개 이상이어야 합니다.")
             return
         
-        if type == 1:
-            await self.team_voice_channel(interaction, team_num)
-        elif type == 2:
-            await self.team_multiple(interaction, team_num)
+        self.active_commands[interaction.user.id] = True
 
+        try:
+            if type == 1:
+                await self.team_voice_channel(interaction, team_num)
+            elif type == 2:
+                await self.team_multiple(interaction, team_num)
+        finally:
+            del self.active_commands[interaction.user.id]
 
     # type: 1
     async def team_voice_channel(self, interaction: discord.Interaction, team_num: int) -> None:

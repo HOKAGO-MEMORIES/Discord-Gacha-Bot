@@ -9,6 +9,7 @@ from typing import Literal
 class Gacha(commands.Cog, name="gacha"):
     def __init__(self, bot) -> None:
         self.bot = bot
+        self.active_commands = {}
 
     @app_commands.command(
         name="가챠",
@@ -18,12 +19,21 @@ class Gacha(commands.Cog, name="gacha"):
         type="1: 혼자 모든 항목을 작성합니다.  /  2: 현재 음성채널에 함께 있는 모든 사람과 항목을 작성합니다.  /  3: 모두가 항목을 작성합니다.",
     )
     async def gacha(self, interaction: discord.Interaction, type: Literal[1, 2, 3]) -> None:
-        if type == 1:
-            await self.gacha_single(interaction)
-        elif type == 2:
-            await self.gacha_voice_channel(interaction)
-        elif type == 3:
-            await self.gacha_multiple(interaction)
+        if interaction.user.id in self.active_commands:
+            await interaction.response.send_message("이미 명령어를 실행 중입니다. 실행 중인 명령어가 완료된 후 다시 시도해 주세요.")
+            return
+
+        self.active_commands[interaction.user.id] = True
+        
+        try: 
+            if type == 1:
+                await self.gacha_single(interaction)
+            elif type == 2:
+                await self.gacha_voice_channel(interaction)
+            elif type == 3:
+                await self.gacha_multiple(interaction)
+        finally:
+            del self.active_commands[interaction.user.id]
 
     # type: 1
     async def gacha_single(self, interaction: discord.Interaction) -> None:
