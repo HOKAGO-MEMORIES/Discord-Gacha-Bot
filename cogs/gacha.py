@@ -172,7 +172,7 @@ class Gacha(commands.Cog, name="gacha"):
                     break
                 items.append(msg.content.strip())
             except asyncio.TimeoutError:
-                await interaction.followup.send("제한 시간을 초과하여 종료합니다.")
+                await interaction.followup.send("제한 시간이 초과되어 종료합니다.")
                 break
             
         if items:

@@ -95,7 +95,7 @@ class Team(commands.Cog, name="team"):
                     if len(members) >= team_num:
                         break
         except asyncio.TimeoutError:
-            await interaction.followup.send("제한 시간을 초과하여 종료합니다.")
+            await interaction.followup.send("제한 시간이 초과되어 종료합니다.")
             return
 
         if len(members) < team_num:
