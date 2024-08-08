@@ -8,13 +8,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv('TOKEN') # 봇 토큰 
-guild_id_raw = os.getenv('GUILD_ID') # 서버 ID
-
-if ',' in guild_id_raw:
-    GUILD_ID = list(map(int, guild_id_raw.split(',')))
-else:
-    GUILD_ID = [int(guild_id_raw)] 
-
 
 intents = discord.Intents.default()
 intents.members = True 
@@ -66,13 +59,11 @@ class GachaBot(commands.Bot):
         self.status_task.start()
 
         # 슬래시 명령어 동기화
-        for guild_id in GUILD_ID:
-            guild = discord.Object(id=guild_id)
-            try:
-                await self.tree.sync(guild=guild)
-                print(f"Commands synced for guild {guild_id}.")
-            except Exception as e:
-                print(f"Failed to sync commands for guild {guild_id}: {e}")
+        try:
+            await self.tree.sync()
+            print("Commands synced globally.")
+        except Exception as e:
+            print(f"Failed to sync commands: {e}")
 
 
 bot = GachaBot()
