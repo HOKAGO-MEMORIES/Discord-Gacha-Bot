@@ -84,24 +84,17 @@ class Team(commands.Cog, name="team"):
             "제한 시간은 60초입니다."
         )
 
-        members = []
         try:
-            while True:
-                msg = await self.bot.wait_for('message', timeout=60.0, check=check)
-                if msg.mentions:
-                    new_members = [m for m in msg.mentions if not m.bot]
-                    members.extend(new_members)
-                    
-                    if len(members) >= team_num:
-                        break
+            msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+            members = [m for m in msg.mentions if not m.bot]
+
+            if len(members) < team_num:
+                await interaction.followup.send("팀 수보다 참가할 멤버 수가 적습니다.")
+                return
         except asyncio.TimeoutError:
             await interaction.followup.send("제한 시간이 초과되어 종료합니다.")
             return
-
-        if len(members) < team_num:
-            await interaction.followup.send("팀 수보다 참가할 멤버 수가 적습니다.")
-            return
-
+       
         random.shuffle(members)
         teams = [[] for _ in range(team_num)]
 
