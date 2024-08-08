@@ -18,10 +18,10 @@ class Ladder(commands.Cog, name="ladder"):
         description="정하기 어렵다면 사다리를 타봅시다."
     )
     @app_commands.describe(
-        type="1: 현재 음성채널에 함께 있는 모든 사람과 팀을 짭니다.  /  2: 원하는 사람을 선택 후 팀을 짭니다.",
+        type="1: 현재 음성채널에 함께 있는 모든 사람과 사다리 타기를 진행합니다.  /  2: 원하는 사람을 선택 후 사다리 타기를 진행합니다.",
         input_type="1: 혼자 항목을 작성합니다.  /  2: 참여하는 모든 사람과 항목을 작성합니다.",
     )
-    async def team(self, interaction: discord.Interaction, type: Literal[1, 2], input_type: Literal[1, 2]) -> None:
+    async def ladder(self, interaction: discord.Interaction, type: Literal[1, 2], input_type: Literal[1, 2]) -> None:
         if interaction.user.id in self.active_commands:
             await interaction.response.send_message("이미 명령어를 실행 중입니다. 실행 중인 명령어가 완료된 후 다시 시도해 주세요.")
             return
@@ -43,9 +43,15 @@ class Ladder(commands.Cog, name="ladder"):
         if not interaction.user.voice or not interaction.user.voice.channel:
             await interaction.response.send_message("음성 채널에 들어가 있어야 합니다. 음성 채널에 들어가신 후 다시 시도해주세요.")
             return
-
+        
         voice_channel = interaction.user.voice.channel
         members = [member for member in voice_channel.members if not member.bot]
+
+        member_mentions = " ".join(member.mention for member in members)
+
+        await interaction.response.send_message(
+            f"음성 채널에 있는 {member_mentions}과 함께 사다리 타기를 진행합니다."
+        )
 
         if input_type == 1:
             await self.get_items_single(interaction, members)
