@@ -16,7 +16,7 @@ class Gacha(commands.Cog, name="gacha"):
         description="선택하기 힘들 때 무작위로 뽑아봅시다."
     )
     @app_commands.describe(
-        type="1: 혼자 모든 항목을 작성합니다.  /  2: 현재 음성채널에 함께 있는 모든 사람과 항목을 작성합니다.  /  3: 모두가 항목을 작성합니다.",
+        type="1: 현재 음성채널에 함께 있는 모든 사람과 항목을 작성합니다.  /  2: 모두가 항목을 작성합니다.  /  3: 혼자 모든 항목을 작성합니다.",
     )
     async def gacha(self, interaction: discord.Interaction, type: Literal[1, 2, 3]) -> None:
         if interaction.user.id in self.active_commands:
@@ -27,52 +27,16 @@ class Gacha(commands.Cog, name="gacha"):
         
         try: 
             if type == 1:
-                await self.gacha_single(interaction)
-            elif type == 2:
                 await self.gacha_voice_channel(interaction)
-            elif type == 3:
+            elif type == 2:
                 await self.gacha_multiple(interaction)
+            elif type == 3:
+                await self.gacha_single(interaction)
+                
         finally:
             del self.active_commands[interaction.user.id]
-
-    # type: 1
-    async def gacha_single(self, interaction: discord.Interaction) -> None:
-        await interaction.response.send_message(
-            "항목을 별도의 메시지로 작성해 주세요. ex) 바나나, 사과, 오렌지를 각각의 메시지로 입력합니다. \n"
-            "제한 시간은 60초 입니다. 입력 완료 후 '완료!'라고 입력해 주세요."
-        )
-
-        def check(msg):
-            return msg.author == interaction.user and msg.channel == interaction.channel
-        
-        items = []
-        while True:
-            try:
-                msg = await self.bot.wait_for('message', timeout=60.0, check=check)
-                if msg.content.lower() == '완료!':
-                    if not items:
-                        await interaction.followup.send("항목이 입력되지 않았습니다.")
-                        return
-                    break
-                items.append(msg.content.strip())
-            except asyncio.TimeoutError:
-                await interaction.followup.send("제한 시간을 초과하여 종료합니다.")
-                break
-            
-        if items:
-            result = random.choice(items)
-
-        result_message = "목록\n" + "\n".join(f"- {item}" for item in items)
-            
-        embed = discord.Embed(
-            title="당첨!",
-            description=f"{result}\n\n{result_message}",
-            color=0x8FCE00
-        )
-        await interaction.followup.send(embed=embed)
-
     
-    # type: 2
+    # type: 1
     async def gacha_voice_channel(self, interaction: discord.Interaction) -> None:
         # 음성 채널에 들어가 있는지 확인
         if not interaction.user.voice or not interaction.user.voice.channel:
@@ -135,7 +99,7 @@ class Gacha(commands.Cog, name="gacha"):
         await interaction.followup.send(embed=embed)
 
 
-    # type: 3
+    # type: 2
     async def gacha_multiple(self, interaction: discord.Interaction) -> None:
         keyword = "!"
         await interaction.response.send_message(
@@ -180,6 +144,42 @@ class Gacha(commands.Cog, name="gacha"):
             return
 
         result = random.choice(all_items)
+        embed = discord.Embed(
+            title="당첨!",
+            description=f"{result}\n\n{result_message}",
+            color=0x8FCE00
+        )
+        await interaction.followup.send(embed=embed)
+
+    # type: 3
+    async def gacha_single(self, interaction: discord.Interaction) -> None:
+        await interaction.response.send_message(
+            "항목을 별도의 메시지로 작성해 주세요. ex) 바나나, 사과, 오렌지를 각각의 메시지로 입력합니다. \n"
+            "제한 시간은 60초 입니다. 입력 완료 후 '완료!'라고 입력해 주세요."
+        )
+
+        def check(msg):
+            return msg.author == interaction.user and msg.channel == interaction.channel
+        
+        items = []
+        while True:
+            try:
+                msg = await self.bot.wait_for('message', timeout=60.0, check=check)
+                if msg.content.lower() == '완료!':
+                    if not items:
+                        await interaction.followup.send("항목이 입력되지 않았습니다.")
+                        return
+                    break
+                items.append(msg.content.strip())
+            except asyncio.TimeoutError:
+                await interaction.followup.send("제한 시간을 초과하여 종료합니다.")
+                break
+            
+        if items:
+            result = random.choice(items)
+
+        result_message = "목록\n" + "\n".join(f"- {item}" for item in items)
+            
         embed = discord.Embed(
             title="당첨!",
             description=f"{result}\n\n{result_message}",
